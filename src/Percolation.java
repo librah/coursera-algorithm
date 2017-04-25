@@ -7,14 +7,14 @@ import edu.princeton.cs.algs4.StdRandom;
 public class Percolation {
 
     // properties
-    int siteEdge;
-    int siteSize;
-    int virtualTopSite, virtualBottomSite;
-    WeightedQuickUnionUF sitesUnionFind;
+    private int siteEdge;
+    private int siteSize;
+    private int virtualTopSite, virtualBottomSite;
+    private WeightedQuickUnionUF sitesUnionFind;
 
-    final static char BLOCKED = 'b', EMPTY_OPEN = 'e', FULL_OPEN = 'o';
-    char[] siteStatus; // store each site's status: blocked, empty open, or full open
-    int openSites = 0;
+    private final static char BLOCKED = 'b', EMPTY_OPEN = 'e', FULL_OPEN = 'o';
+    private char[] siteStatus; // store each site's status: blocked, empty open, or full open
+    private int openSites = 0;
 
     // functions
     public Percolation(int n) {                // create n-by-n grid, with all sites blocked
@@ -83,26 +83,6 @@ public class Percolation {
 
     public boolean percolates() {             // does the system percolate?
         return sitesUnionFind.connected(virtualTopSite, virtualBottomSite);
-    }
-
-    public static void main(String[] args) {  // test client (optional)
-        if (args.length != 2) {
-            System.out.println("Usage: java Percolation <n> <T>");
-            System.out.println(" <n>: size of sites");
-            System.out.println(" <T>: rounds of testing");
-        }
-
-
-        int n = 200;
-        int t = 100;
-
-        int loopCount = 0;
-        Percolation p = new Percolation(n);
-        while (!p.percolates()) {
-            p.open(StdRandom.uniform(1, n + 1), StdRandom.uniform(1, n+1));
-            loopCount ++;
-        }
-
     }
 
     /**
