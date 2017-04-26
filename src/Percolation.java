@@ -2,17 +2,16 @@
  * Created by librah on 04/22/2017.
  */
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-import edu.princeton.cs.algs4.StdRandom;
 
 public class Percolation {
-
     // properties
+    private static final char BLOCKED = 'b', EMPTY_OPEN = 'e', FULL_OPEN = 'o';
+
     private int siteEdge;
     private int siteSize;
     private int virtualTopSite, virtualBottomSite;
     private WeightedQuickUnionUF sitesUnionFind;
 
-    private final static char BLOCKED = 'b', EMPTY_OPEN = 'e', FULL_OPEN = 'o';
     private char[] siteStatus; // store each site's status: blocked, empty open, or full open
     private int openSites = 0;
 
@@ -29,14 +28,15 @@ public class Percolation {
         virtualTopSite = 0;
         virtualBottomSite = siteSize -1;
 
-        for (int i=1; i<=siteEdge; i++) {
-            sitesUnionFind.union(virtualTopSite, getIndex(1, i));     // connect the top sites to the virtual top site
-            sitesUnionFind.union(virtualBottomSite, getIndex(siteEdge, i)); // connect the bottom sites to the virtual bottom site
+        // connect the top sites to the virtual top and virtual bottom
+        for (int i = 1; i <= siteEdge; i++) {
+            sitesUnionFind.union(virtualTopSite, getIndex(1, i));
+            sitesUnionFind.union(virtualBottomSite, getIndex(siteEdge, i));
         }
 
         // initialize the sites as blocked
         siteStatus = new char[siteSize];
-        for (int i=0; i<siteSize; i++) {
+        for (int i = 0; i < siteSize; i++) {
             siteStatus[i] = BLOCKED;
         }
     }
@@ -48,7 +48,7 @@ public class Percolation {
         }
 
         siteStatus[index] = EMPTY_OPEN; // first, change my status to open
-        openSites ++;
+        openSites++;
 
         // find out my neighbors, and connect to them if they're open
         if (row > 1) { // find the neighbor above me
@@ -86,16 +86,18 @@ public class Percolation {
     }
 
     /**
-     * By convention, the row and column indices are integers between 1 and n, where (1, 1) is the upper-left site: Throw a java.lang.IndexOutOfBoundsException if any argument to open(), isOpen(), or isFull() is outside its prescribed range. The constructor should throw a java.lang.IllegalArgumentException if n ≤ 0.
+     * By convention, the row and column indices are integers between 1 and n, where (1, 1) is the upper-left site:
+     * Throw a java.lang.IndexOutOfBoundsException if any argument to open(), isOpen(), or isFull() is outside its
+     * prescribed range. The constructor should throw a java.lang.IllegalArgumentException if n ≤ 0.
      * @param row
      * @param col
      * @return
      */
     private int getIndex(int row, int col) {
-        if (! ( row >= 1 && row <= siteEdge)) {
+        if (!(row >= 1 && row <= siteEdge)) {
             throw new IndexOutOfBoundsException("row (value=" + row + ") is not between 1 ~ " + siteEdge);
         }
-        if (! ( col >= 1 && col <= siteEdge)) {
+        if (!(col >= 1 && col <= siteEdge)) {
             throw new IndexOutOfBoundsException("col (value=" + col + ") is not between 1 ~ " + siteEdge);
         }
 

@@ -23,7 +23,7 @@ public class PercolationStats {
 
         double[] openFractions = new double[trials];
 
-        for (int i=0; i<trials; i++) {
+        for (int i = 0; i < trials; i++) {
             int loopCount = 0;
 
             Percolation p = new Percolation(n);
@@ -34,7 +34,7 @@ public class PercolationStats {
                     continue;
                 } else {
                     p.open(x, y);
-                    loopCount ++;
+                    loopCount++;
                 }
             }
 
@@ -68,7 +68,7 @@ public class PercolationStats {
             System.out.println("Usage: java Percolation <n> <T>");
             System.out.println(" <n>: size of sites");
             System.out.println(" <T>: rounds of testing");
-            System.exit(-1);
+            return;
         }
 
         int n = Integer.parseInt(args[0]);
