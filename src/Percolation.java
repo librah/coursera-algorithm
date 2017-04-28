@@ -28,17 +28,12 @@ public class Percolation {
         virtualTopSite = 0;
         virtualBottomSite = siteSize -1;
 
-        // connect the top sites to the virtual top and virtual bottom
-        for (int i = 1; i <= siteEdge; i++) {
-            sitesUnionFind.union(virtualTopSite, getIndex(1, i));
-            sitesUnionFind.union(virtualBottomSite, getIndex(siteEdge, i));
-        }
-
         // initialize the sites as blocked
         siteStatus = new char[siteSize];
         for (int i = 0; i < siteSize; i++) {
             siteStatus[i] = BLOCKED;
         }
+        siteStatus[virtualTopSite] = FULL_OPEN;
     }
 
     public void open(int row, int col) {    // open site (row, col) if it is not open already
@@ -51,6 +46,9 @@ public class Percolation {
         openSites++;
 
         // find out my neighbors, and connect to them if they're open
+        if (row == 1) {
+            this.union(index, virtualTopSite);
+        }
         if (row > 1) { // find the neighbor above me
             int neighbor = getIndex(row-1, col);
             this.union(index, neighbor);
@@ -58,6 +56,10 @@ public class Percolation {
         if (row < siteEdge) {
             int neighbor = getIndex(row+1, col);
             this.union(index, neighbor);
+        }
+        if (row == siteEdge) {
+            this.union(virtualBottomSite, index);
+
         }
         if (col < siteEdge) {
             int neighbor = getIndex(row, col+1);
@@ -70,11 +72,12 @@ public class Percolation {
     }
 
     public boolean isOpen(int row, int col) { // is site (row, col) open?
-        return siteStatus[getIndex(row, col)] == EMPTY_OPEN;
+        return siteStatus[getIndex(row, col)] == EMPTY_OPEN || siteStatus[getIndex(row, col)] == FULL_OPEN;
     }
 
     public boolean isFull(int row, int col) { // is site (row, col) full?
-        return siteStatus[getIndex(row, col)] == FULL_OPEN;
+        // return siteStatus[getIndex(row, col)] == FULL_OPEN;
+        return sitesUnionFind.connected(getIndex(row, col), virtualTopSite);
     }
 
     public int numberOfOpenSites() {       // number of open sites
@@ -105,16 +108,15 @@ public class Percolation {
     }
 
     private void union(int from, int to) {
-        switch (siteStatus[to]) {
-            case BLOCKED:
-                // do nothing
-                break;
-            case EMPTY_OPEN:
-            case FULL_OPEN:
-                sitesUnionFind.union(from, to);
-                siteStatus[from] = siteStatus[to];
-                break;
+        if (siteStatus[to] == BLOCKED) {
+            return;
         }
+
+        if (siteStatus[from] == FULL_OPEN || siteStatus[to] == FULL_OPEN) {
+            siteStatus[from] = FULL_OPEN;
+            siteStatus[to] = FULL_OPEN;
+        }
+        sitesUnionFind.union(from, to);
     }
 
 }
