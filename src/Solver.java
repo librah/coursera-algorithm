@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
+// from https://github.com/antonillos/8puzzle/
+
 public class Solver {
     private boolean solvable;
     private Stack<Board> solution = null;
